@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Ajax 실습</title>
+<script type="text/javascript">
+	var xhttp;
+	
+	function createHttpRequest() {
+		xhttp = new XMLHttpRequest();
+	}
+	
+	function mySend() {
+		createHttpRequest();
+		xhttp.onreadystatechange = callFunction;
+		// GET방식으로 쿼리스트링을 sampleJSON.jsp로 요청함 
+		xhttp.open("GET", "sampleJSON.jsp?userid=쏭쓰&passwd=json", true);
+		xhttp.send(null);
+	}
+	
+	function callFunction() {
+		if(xhttp.readyState == 4){
+			if(xhttp.status == 200){
+				// sampleJSON.jsp가 처리한 응답 결과를 responseText로 받고 JSON객체로 변경하기 위해 eval()을 사용함 
+				var responseData = xhttp.responseText;
+				var jsonObject = eval('(' + responseData + ')');
+				// JSON객체로 부터 dot을 이용해 값을 참조함 
+				var userid = jsonObject.userid;
+				var passwd = jsonObject.passwd;
+				// id가 result인 divTag에 innerHTML속성을 이용해 데이터를 웹 브라우저에 출력함 
+				document.getElementById("result").innerHTML = userid + "\t" + passwd; 
+			}
+		}
+	}
+</script>
+</head>
+<body>
+	JSON 텍스트 파일 실습 <br>
+	<button onclick="mySend()">파일 수신</button>
+	<div id="result"></div>
+	
+	<ul>
+		<li>JSP가 만든 데이터 형식이 JSON형태이기 때문에 eval()를 추가로 사용해 JSON객체로 변경한 후 사용해야 함</li>
+		<li>GET방식을 이용한 파라미터 전송 방법은 open()에서 쿼리스트링을 이용해 파라미터를 전달하고 send()에서는 파라미터로 null을 지정함</li>
+	</ul>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Ajax 실습</title>
+<script type="text/javascript">
+	var xhttp;
+	
+	function createHttpRequest() {
+		xhttp = new XMLHttpRequest();
+	}
+	
+	function mySend() {
+		createHttpRequest();
+		xhttp.onreadystatechange = callFunction;
+		// POST방식으로 서버의 samplePost.jsp에 요청함 
+		xhttp.open("POST", "samplePost.jsp", true);
+		var sendString = "userid=쏭쓰&passwd=post";
+		// 한글 처리를 위하여 Content-Type을 application/x-www-form-urlencoded 값으로 설정함 
+		xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		// send() 인자에 파라미터로 전달할 쿼리스트링을 지정함 
+		xhttp.send(sendString);
+	}
+	
+	function callFunction() {
+		if(xhttp.readyState == 4) {
+			if(xhttp.status == 200) {
+				var responseData = xhttp.responseText;
+				document.getElementById("result").innerHTML = responseData;
+			}
+		}
+	}
+</script>
+</head>
+<body>
+	클라이언트의 HTML파일에서 서버의 JSP에 POST방식으로 파라미터를 전달하고, 서버는 동적 데이터를 생성하여 응답처리 하는 예제 <br>
+	<button onclick="mySend()">파일 수신</button>
+	<div id="result"></div>
+	
+	<ul>
+		<li>POST방식으로 요청할 때에는 Context-Type헤더에 "application/x-www-form-urlencoded"값을 설정해야 한글 처리가 가능함</li>
+		<li>send()에는 null값 대신에 쿼리스트링을 설정해야 함</li>
+	</ul>
+</body>
+</html>

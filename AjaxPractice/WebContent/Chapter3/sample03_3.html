@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Ajax 실습</title>
+<script type="text/javascript">
+	var xhttp;
+	
+	function createHttpRequest() {
+		xhttp = new XMLHttpRequest();
+	}
+	
+	function mySend() {
+		createHttpRequest();
+		xhttp.onreadystatechange = callFunction;
+		xhttp.open("GET", "json.json", true);
+		xhttp.send(null);
+	}
+	
+	function callFunction() {
+		if(xhttp.readyState == 4){
+			if(xhttp.status == 200) {
+				// JSON데이터를 응답받기 위해 responseText프로퍼티를 사용함 
+				var responseData = xhttp.responseText;
+				// eval함수를 이용해 응답 데이터인 텍스트를 JSON객체로 변환함 
+				var jsonObject = eval('('+responseData+')');
+				// dot를 이용하여 JSON객체의 name, age, address에 접근하여 value값을 얻음 
+				var name = jsonObject.username;
+				var age = jsonObject.age;
+				var address = jsonObject.address;
+				document.getElementById("result").innerHTML = name + "\t" + age + "\t" + address;
+			}
+		}
+	}
+</script>
+</head>
+<body>
+	JSON형식의 정적 데이터 파일을 읽어서 웹 브라우저에 출력하는 예제 <br>
+	<button onclick="mySend()">파일 수신</button>
+	<div id="result"></div>
+	<ul>
+		<li>[파일 수신]버튼을 클릭하면 Ajax통신을 이용해 서버에 json.json파일을 요청함</li>
+		<li>JSON형식의 텍스트 파일을 읽어와 JSON 객체로 변환하기 위해 eval()를 사용함</li>
+	</ul>
+</body>
+</html>

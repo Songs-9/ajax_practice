@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Ajax 실습</title>
+<script type="text/javascript">
+	// XMLHttpRequest객체를 저장할 변수 선언 
+	var xhttp;
+	
+	// XMLHttpRequest 객체를 생성해 변수xhttp에 저장 
+	function createHttpRequest() {
+		xhttp = new XMLHttpRequest();
+	}
+	
+	function mySend() {
+		// createHttpRequest()를 호출해 XMLHttpRequest객체를 생성 
+		createHttpRequest();
+		// 서버의 응답을 처리하기 위해서 onreadystatechange프로퍼티에서는 readyState반환값에 따라 자동으로 호출하는 callFunction함수를 설정함 
+		xhttp.onreadystatechange = callFunction;
+		// GET방식으로 서버에 sample.txt파일을 비동기로 요청함 
+		xhttp.open("GET", "sample.txt", true);
+		xhttp.send(null);
+	}
+	
+	function callFunction() {
+		// readyState와 status의 값으로 조건 검사를 함 
+		if(xhttp.readyState == 4 ) {
+			if(xhttp.status == 200 ) {
+				// 응답 데이터 형식은 responceText프로퍼티를 이용한 일반 텍스트 형식으로 데이터를 받음 
+				var responseData = xhttp.responseText;
+				// id값이 result인 div태그를 참조하여 innerHTML로 응답 데이터를 화면에 출력함 
+				document.getElementById("result").innerHTML = responseData;
+			}
+		}
+	}
+</script>
+</head>
+<body>
+	정적 데이터 형식으로 된 sample.txt파일을 읽어서 웹 브라우저에 출력하는 예제 <br>
+	<!-- [파일 수신] 버튼을 클릭할 때 mySend()를 호출하는 이벤트 핸들러를 <button>tag에 설정함 -->
+	<button onclick="mySend()">파일 수신</button>
+	<!-- id값이 result인 <div>tag를 설정함 -->
+	<div id="result"></div>
+	<ul>
+		<li>[파일 수신]버튼을 클릭하면 Ajax통신을 이용해 서버에 sample.txt파일을 요청함</li>
+		<li>서버는 sample.txt파일의 내용을 읽어 클라이언트에 응답하고 클라이언트는 응답 데이터를 DOM API를 활용해 div태그에 출력함</li>
+		<li>sample.txt파일 내에 저장된 문자열을 화면 전환 없이 동적으로 사용자의 웹 브라우저에 출력할 수 있음</li>
+	</ul>
+</body>
+</html>
